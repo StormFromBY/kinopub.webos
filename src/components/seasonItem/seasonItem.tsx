@@ -25,7 +25,7 @@ const SeasonItem: React.FC<Props> = ({ item, season, onEpisodeFocus, onEpisodeBl
             {
               itemId: item.id,
             },
-            { videoId: episode.id, seasonId: season.id },
+            { episodeId: `${episode.number}`, seasonId: `${season.number}` },
           ),
           {
             item,
@@ -50,13 +50,13 @@ const SeasonItem: React.FC<Props> = ({ item, season, onEpisodeFocus, onEpisodeBl
 
   return (
     <div className="flex flex-col">
-      <Accordion title={`Сезон ${season.number}`}>
+      <Accordion title={season.title ? `${season.number}. ${season.title}` : `Сезон ${season.number}`}>
         <div className="flex flex-wrap">
           {map(season.episodes, (episode) => (
             <ImageItem
               key={episode.id}
               source={episode.thumbnail}
-              caption={`Эпизод ${episode.number}`}
+              caption={episode.title ? `${episode.number}. ${episode.title}` : `Эпизод ${episode.number}`}
               onClick={handleEpisodeClick(episode)}
               onFocus={handleEpisodeFocus(episode)}
               onBlur={handleEpisodeBlur(episode)}

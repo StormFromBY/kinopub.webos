@@ -96,7 +96,11 @@ class KinopubApiClient extends BaseApiClient {
 
     const { interval, code, user_code, verification_uri } = await this.requestDeviceCode();
 
-    await onConfirm?.(user_code, verification_uri);
+    if (user_code) {
+      await onConfirm?.(user_code, verification_uri);
+    } else {
+      throw new Error(`Did't received user_code`);
+    }
 
     return new Promise<void>((resolve, reject) => {
       this.clearTimers();
@@ -564,9 +568,10 @@ class KinopubApiClient extends BaseApiClient {
    * @param id Идентификатор фильма/сериала/и тд
    * @param video Номер видео/эпизода, начинается с 1. Если отсутствует, модификации подвергаются все эпизоды сезона
    * @param season Номер сезона, присутствует только у сериалов, начинается с 1.
+   * @param status 1 отметить как просмотрено, 0 отметить как не просмотрено
    */
-  watchingToggle(id: string, video?: number, season?: number) {
-    return this.get<WatchingToggleResponse>(`/v1/watching/toggle`, { id, video, season });
+  watchingToggle(id: string, video?: number, season?: number, status?: Bool) {
+    return this.get<WatchingToggleResponse>(`/v1/watching/toggle`, { id, video, season, status });
   }
 
   /**
