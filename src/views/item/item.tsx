@@ -148,12 +148,10 @@ const ItemView: React.FC = () => {
             alt={title}
           />
 
-          <Text className="p-4 absolute top-0">{title}</Text>
-
-          <div className="absolute flex bottom-8 left-4 right-4">
-            <div>
+          {data?.item && (
+            <div className="absolute flex p-4 bottom-0 left-0 right-0 bg-black bg-opacity-70">
               <Button icon="play_circle_outline" onClick={handleOnPlayClick} className="text-red-600">
-                Смотреть
+                Смотреть{isSerial ? ` s${videoToPlay.snumber}e${videoToPlay.number}` : ''}
               </Button>
 
               <Button icon="bookmark" onClick={handleOnBookmarksClick} className="text-yellow-600">
@@ -163,20 +161,20 @@ const ItemView: React.FC = () => {
               <Popup visible={bookmarksPopupVisible} onClose={handleBookmarksPopupClose} closeButton="Yellow">
                 <Bookmarks key={`${itemId}-${bookmarksPopupVisible}`} itemId={itemId!} />
               </Popup>
-            </div>
 
-            <div>
-              {trailer && (
+              {trailer ? (
                 <Button icon="videocam" onClick={handleOnTrailerClick} className="text-green-600">
                   Трейлер
                 </Button>
+              ) : (
+                <div />
               )}
 
               <Button icon={isWatching ? 'visibility_off' : 'visibility'} onClick={handleOnVisibilityClick} className="text-blue-600">
                 {isWatching ? 'Не буду смотреть' : 'Буду смотреть'}
               </Button>
             </div>
-          </div>
+          )}
         </div>
 
         <div className="flex flex-col p-6">
@@ -248,8 +246,8 @@ const ItemView: React.FC = () => {
                 <div className="py-2">
                   <Text className="text-gray-500">Перевод</Text>
                   <div className="flex flex-wrap">
-                    {map(audios, (voice) => (
-                      <Text className="w-1/2 px-1" key={voice.name}>
+                    {map(audios, (voice, idx) => (
+                      <Text className="w-1/2 px-1" key={idx}>
                         {voice.name}
                       </Text>
                     ))}
@@ -261,8 +259,8 @@ const ItemView: React.FC = () => {
                 <div className="py-2">
                   <Text className="text-gray-500">Субтитры</Text>
                   <div className="flex flex-wrap pl-1">
-                    {map(subtitles, (subtitle) => (
-                      <Text className="w-1/6" key={subtitle.name}>
+                    {map(subtitles, (subtitle, idx) => (
+                      <Text className="w-1/6" key={idx}>
                         {subtitle.name}
                       </Text>
                     ))}
